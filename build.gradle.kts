@@ -19,6 +19,8 @@ val flinkVersion = "1.20.0"
 val confluentVersion = "7.5.0"
 val avroVersion = "1.11.1"
 val junitVersion = "5.9.2"
+val logbackVersion = "1.4.11"
+val slf4jVersion = "2.0.9"
 
 dependencies {
     // Kafka Streams
@@ -40,6 +42,12 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
     implementation("com.fasterxml.jackson.core:jackson-annotations:2.15.2")
 
+    // Logging
+    implementation("org.slf4j:slf4j-api:$slf4jVersion")
+    implementation("ch.qos.logback:logback-classic:$logbackVersion")
+    implementation("ch.qos.logback:logback-core:$logbackVersion")
+    implementation("org.fusesource.jansi:jansi:2.4.1")  // For colorful console output
+
     // Testing
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
@@ -53,6 +61,10 @@ java {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+tasks.withType<Copy> {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
