@@ -1,6 +1,6 @@
 plugins {
     java
-    kotlin("jvm") version "1.9.25"
+    kotlin("jvm") version "2.1.20"
     id("com.github.davidmc24.gradle.plugin.avro") version "1.9.1"
 }
 
@@ -16,10 +16,10 @@ repositories {
 
 // Define versions in one place
 val kafkaVersion = "3.4.0"
-val flinkVersion = "1.20.0"
+val flinkVersion = "1.20.1"
 val confluentVersion = "7.5.0"
 val avroVersion = "1.12.0"
-val junitVersion = "5.9.2"
+val junitVersion = "5.12.2"
 val logbackVersion = "1.5.18"
 val slf4jVersion = "2.0.17"
 val testcontainersVersion = "1.19.7"
