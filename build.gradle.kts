@@ -19,7 +19,7 @@ val flinkVersion = "1.20.0"
 val confluentVersion = "7.5.0"
 val avroVersion = "1.11.1"
 val junitVersion = "5.9.2"
-val logbackVersion = "1.4.11"
+val logbackVersion = "1.5.18"
 val slf4jVersion = "2.0.9"
 
 dependencies {
