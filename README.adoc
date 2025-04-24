@@ -1,0 +1,102 @@
+= 🔄 Flink vs Kafka Streams
+:toc: macro
+:toc-title: Table of Contents
+:icons: font
+
+image:https://img.shields.io/badge/Java-17-orange?logo=java[Java 17, link=https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html]
+image:https://img.shields.io/badge/Kotlin-2.1.20-blue?logo=kotlin[Kotlin, link=https://kotlinlang.org/]
+image:https://img.shields.io/badge/Gradle-8.x-green?logo=gradle[Gradle, link=https://gradle.org/]
+image:https://img.shields.io/badge/Apache%20Kafka-3.4.0-red?logo=apachekafka[Apache Kafka, link=https://kafka.apache.org/]
+image:https://img.shields.io/badge/Apache%20Flink-1.20.1-blue?logo=apacheflink[Apache Flink, link=https://flink.apache.org/]
+image:https://img.shields.io/badge/Avro-1.12.0-yellow?logo=apache[Avro, link=https://avro.apache.org/]
+image:https://img.shields.io/badge/Confluent%20Schema%20Registry-7.5.0-purple?logo=confluent[Confluent Schema Registry, link=https://docs.confluent.io/platform/current/schema-registry/index.html]
+image:https://img.shields.io/badge/JUnit-5.12.2-brightgreen?logo=junit5[JUnit 5, link=https://junit.org/junit5/]
+image:https://img.shields.io/badge/TestContainers-1.19.7-lightgrey?logo=docker[TestContainers, link=https://www.testcontainers.org/]
+image:https://img.shields.io/badge/Built%20with-Junie-blue[Built with Junie]
+
+toc::[]
+
+== 📋 Project Overview
+
+This project provides a comparative implementation of stream processing using Apache Flink and Kafka Streams. It demonstrates how to perform similar data processing tasks using both frameworks, allowing developers to understand the differences, strengths, and trade-offs between them.
+
+The project implements a stream processing pipeline that:
+
+1. 📥 Consumes click events from a Kafka topic
+2. 🔗 Joins these events with category data
+3. ⏱️ Performs windowed aggregation to count unique users per category
+4. 📤 Outputs the results to another Kafka topic
+
+== 🛠️ Technologies Used
+
+This project uses the following technologies:
+
+* ☕ *Java 17* - Programming language
+* 🧩 *Kotlin* - Used for build configuration
+* 🐘 *Gradle* - Build tool with Kotlin DSL
+* 📊 *Apache Kafka* - Distributed streaming platform
+* 🌊 *Apache Flink* - Stream processing framework
+* 📋 *Apache Avro* - Data serialization system
+* 🗄️ *Confluent Schema Registry* - Schema management service
+* 🧪 *JUnit 5* - Testing framework
+* 🐳 *TestContainers* - Integration testing with containerized dependencies
+
+== 🏗️ Build Instructions
+
+=== 📋 Prerequisites
+
+* ☕ Java 17 or higher
+* 🐘 Gradle 8.x or higher
+* 🐳 Docker (for integration tests)
+
+=== 🔨 Building the Project
+
+[source,bash]
+----
+./gradlew build
+----
+
+=== 🧪 Running Tests
+
+To run unit tests:
+
+[source,bash]
+----
+./gradlew test
+----
+
+To run integration tests:
+
+[source,bash]
+----
+./gradlew integrationTest
+----
+
+== 📁 Project Structure
+
+[source]
+----
+src/
+├── main/
+│   ├── avro/           # Avro schema definitions
+│   ├── java/           # Main source code
+│   └── resources/      # Configuration files
+├── test/
+│   └── java/           # Unit tests
+└── integrationTest/
+    └── java/           # Integration tests
+----
+
+=== 🔍 Implementation Details
+
+The project contains three main implementations:
+
+1. 📊 *KafkaStreamsProcessor* - Implementation using Kafka Streams API
+2. 🌊 *FlinkDataStreamProcessor* - Implementation using Flink DataStream API
+3. 📋 *FlinkTableProcessor* - Implementation using Flink Table API
+
+Each implementation provides the same functionality but uses different APIs and approaches.
+
+== 📜 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.

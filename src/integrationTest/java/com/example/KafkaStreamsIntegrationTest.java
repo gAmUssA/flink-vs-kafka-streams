@@ -29,8 +29,8 @@ public class KafkaStreamsIntegrationTest {
 
     private static final Logger logger = LoggerFactory.getLogger(KafkaStreamsIntegrationTest.class);
     
-    private static final String KAFKA_IMAGE = "confluentinc/cp-kafka:7.5.0";
-    private static final String SCHEMA_REGISTRY_IMAGE = "confluentinc/cp-schema-registry:7.5.0";
+    private static final String KAFKA_IMAGE = "confluentinc/cp-kafka:7.9.0";
+    private static final String SCHEMA_REGISTRY_IMAGE = "confluentinc/cp-schema-registry:7.9.0";
     
     private static Network network;
     private static KafkaContainer kafkaContainer;

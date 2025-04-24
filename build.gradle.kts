@@ -18,14 +18,14 @@ repositories {
 }
 
 // Define versions in one place
-val kafkaVersion = "3.4.0"
+val kafkaVersion = "3.9.0"
 val flinkVersion = "1.20.1"
-val confluentVersion = "7.5.0"
+val confluentVersion = "7.9.0"
 val avroVersion = "1.12.0"
 val junitVersion = "5.12.2"
 val logbackVersion = "1.5.18"
 val slf4jVersion = "2.0.17"
-val testcontainersVersion = "1.19.7"
+val testcontainersVersion = "1.21.0"
 
 // Define source sets
 sourceSets {
@@ -104,12 +104,12 @@ dependencies {
     integrationTestImplementation("org.testcontainers:testcontainers:$testcontainersVersion")
     integrationTestImplementation("org.testcontainers:junit-jupiter:$testcontainersVersion")
     integrationTestImplementation("org.testcontainers:kafka:$testcontainersVersion")
-    integrationTestImplementation("com.github.docker-java:docker-java-api:3.3.6")
+    integrationTestImplementation("com.github.docker-java:docker-java-api:3.5.0")
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 // Configure common test settings
@@ -175,7 +175,7 @@ tasks.withType<Copy> {
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_11)
+        jvmTarget.set(JvmTarget.JVM_17)
     }
 }
 
