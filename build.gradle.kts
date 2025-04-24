@@ -38,9 +38,9 @@ dependencies {
     implementation("org.apache.avro:avro:$avroVersion")
 
     // Jackson for Avro
-    implementation("com.fasterxml.jackson.core:jackson-core:2.15.2")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
-    implementation("com.fasterxml.jackson.core:jackson-annotations:2.15.2")
+    implementation("com.fasterxml.jackson.core:jackson-core:2.18.3")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.18.3")
+    implementation("com.fasterxml.jackson.core:jackson-annotations:2.18.3")
 
     // Logging
     implementation("org.slf4j:slf4j-api:$slf4jVersion")
