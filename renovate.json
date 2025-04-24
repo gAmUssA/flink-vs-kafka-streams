@@ -1,36 +1,53 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
+    "config:recommended"
   ],
   "packageRules": [
     {
-      "matchUpdateTypes": ["minor", "patch"],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
       "matchCurrentVersion": "!/^0/",
       "automerge": true
     },
     {
-      "matchPackagePatterns": ["^org.apache.kafka"],
-      "groupName": "Kafka dependencies"
+      "groupName": "Kafka dependencies",
+      "matchPackageNames": [
+        "/^org.apache.kafka/"
+      ]
     },
     {
-      "matchPackagePatterns": ["^org.apache.flink"],
-      "groupName": "Flink dependencies"
+      "groupName": "Flink dependencies",
+      "matchPackageNames": [
+        "/^org.apache.flink/"
+      ]
     },
     {
-      "matchPackagePatterns": ["^org.apache.avro"],
-      "groupName": "Avro dependencies"
+      "groupName": "Avro dependencies",
+      "matchPackageNames": [
+        "/^org.apache.avro/"
+      ]
     },
     {
-      "matchPackagePatterns": ["^com.fasterxml.jackson"],
-      "groupName": "Jackson dependencies"
+      "groupName": "Jackson dependencies",
+      "matchPackageNames": [
+        "/^com.fasterxml.jackson/"
+      ]
     }
   ],
-  "schedule": ["every weekend"],
-  "labels": ["dependencies"],
+  "schedule": [
+    "every weekend"
+  ],
+  "labels": [
+    "dependencies"
+  ],
   "prHourlyLimit": 2,
   "prConcurrentLimit": 5,
   "gradle": {
-    "fileMatch": ["(^|/)build\\.gradle\\.kts$"]
+    "fileMatch": [
+      "(^|/)build\\.gradle\\.kts$"
+    ]
   }
 }
