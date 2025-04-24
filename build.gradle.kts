@@ -20,7 +20,7 @@ val confluentVersion = "7.5.0"
 val avroVersion = "1.12.0"
 val junitVersion = "5.9.2"
 val logbackVersion = "1.5.18"
-val slf4jVersion = "2.0.9"
+val slf4jVersion = "2.0.17"
 
 dependencies {
     // Kafka Streams
