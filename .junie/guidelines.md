@@ -5,7 +5,7 @@ This document provides essential information for developers working on the Flink
 ## Build/Configuration Instructions
 
 ### Prerequisites
-- Java 11 or higher
+- Java 17 or higher
 - Gradle 8.x or higher
 - Apache Kafka 3.4.0
 - Apache Flink 1.20.0
@@ -33,6 +33,41 @@ The project uses JUnit 5 for testing. You can run all tests, a specific test cla
 1. Create a new test class in the `src/test/java/com/example/` directory
 2. Use the JUnit 5 annotations (`@Test`, `@BeforeEach`, etc.)
 3. For testing private methods, use reflection as demonstrated in `FlinkDataStreamProcessorTest`
+
+### Using Awaitility for Asynchronous Testing
+The project uses Awaitility for better asynchronous testing, especially in integration tests with Kafka:
+
+1. Import the Awaitility library in your test classes.
+
+2. Replace arbitrary Thread.sleep calls with Awaitility's polling mechanism:
+   - Define a maximum wait time (e.g., 30 seconds)
+   - Set an appropriate polling interval (e.g., 1 second)
+   - Use the pollInSameThread option for Kafka Consumers
+   - Specify a condition that must be met to continue test execution
+
+3. Key benefits:
+   - More reliable than arbitrary sleep times
+   - Clear timeout specification
+   - Customizable polling intervals
+   - Better readability and maintainability
+
+### Using AssertJ for Fluent Assertions
+The project uses AssertJ for more readable and fluent assertions:
+
+1. Import the AssertJ library in your test classes.
+
+2. Use AssertJ's fluent API instead of JUnit assertions:
+   - Start assertions with the assertThat() method
+   - Add descriptive context with the as() method
+   - Chain multiple assertions together
+   - Use specific matchers for different data types
+   - Add custom failure messages with withFailMessage()
+
+3. Key benefits:
+   - More readable assertions
+   - Better error messages
+   - Method chaining for multiple assertions
+   - Rich set of matchers for different data types
 
 ## Additional Development Information
 
