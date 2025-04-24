@@ -1,6 +1,6 @@
 plugins {
     java
-    kotlin("jvm") version "1.9.25"
+    kotlin("jvm") version "2.1.20"
     id("com.github.davidmc24.gradle.plugin.avro") version "1.9.1"
 }
 
