@@ -25,7 +25,7 @@ val avroVersion = "1.12.0"
 val junitVersion = "5.12.2"
 val logbackVersion = "1.5.18"
 val slf4jVersion = "2.0.17"
-val testcontainersVersion = "1.19.7"
+val testcontainersVersion = "1.21.0"
 
 // Define source sets
 sourceSets {
