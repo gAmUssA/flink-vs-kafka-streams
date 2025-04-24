@@ -23,11 +23,11 @@ This document contains a detailed enumerated task list for implementing the real
 - [x] 1.4.3. Verify window functionality in tests
 
 ### 1.5. Integration Testing with Testcontainers
-- [ ] 1.5.1. Add Testcontainers dependencies to the project
-- [ ] 1.5.2. Implement Kafka and Schema Registry containers
-- [ ] 1.5.3. Create integration tests for Kafka Streams with real Kafka
-- [ ] 1.5.4. Test schema evolution and serialization with actual Schema Registry
-- [ ] 1.5.5. Verify end-to-end functionality with real infrastructure
+- [x] 1.5.1. Add Testcontainers dependencies to the project
+- [x] 1.5.2. Implement Kafka and Schema Registry containers
+- [x] 1.5.3. Create integration tests for Kafka Streams with real Kafka
+- [x] 1.5.4. Test schema evolution and serialization with actual Schema Registry
+- [x] 1.5.5. Verify end-to-end functionality with real infrastructure
 
 ## 2. Flink DataStream API Implementation
 
