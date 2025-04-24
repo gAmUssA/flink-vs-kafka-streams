@@ -7,7 +7,7 @@ plugins {
     id("jvm-test-suite")
 }
 
-group = "com.example"
+group = "dev.gamov.streams"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -105,6 +105,12 @@ dependencies {
     integrationTestImplementation("org.testcontainers:junit-jupiter:$testcontainersVersion")
     integrationTestImplementation("org.testcontainers:kafka:$testcontainersVersion")
     integrationTestImplementation("com.github.docker-java:docker-java-api:3.5.0")
+
+    // Awaitility for better async testing
+    integrationTestImplementation("org.awaitility:awaitility:4.2.0")
+
+    // AssertJ for fluent assertions
+    integrationTestImplementation("org.assertj:assertj-core:3.25.3")
 }
 
 java {

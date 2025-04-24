@@ -1,5 +1,8 @@
-package com.example;
+package dev.gamov.streams.flink;
 
+import dev.gamov.streams.Category;
+import dev.gamov.streams.Click;
+import dev.gamov.streams.EnrichedClick;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;

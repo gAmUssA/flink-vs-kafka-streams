@@ -69,19 +69,19 @@ This system will be a standalone demo application that integrates with Apache Ka
 The system must be implemented using three different approaches:
 
 #### 5.1.1 Kafka Streams Implementation
-- TR1: Implement using Kafka Streams DSL
+- TR1: Implement using Kafka Streams DSL in package `dev.gamov.streams.kafka`
 - TR2: Use SpecificAvroSerde for Avro serialization/deserialization
 - TR3: Configure Schema Registry integration
 - TR4: Implement windowed aggregation for unique user counting
 
 #### 5.1.2 Flink DataStream API Implementation
-- TR5: Implement using Flink DataStream API
+- TR5: Implement using Flink DataStream API in package `dev.gamov.streams.flink`
 - TR6: Use ConfluentRegistryAvroDeserializationSchema for Avro deserialization
 - TR7: Implement proper state management for joins
 - TR8: Configure sliding windows for aggregation
 
 #### 5.1.3 Flink Table API Implementation
-- TR9: Implement using Flink Table API with builder-style
+- TR9: Implement using Flink Table API with builder-style in package `dev.gamov.streams.flink`
 - TR10: Configure Kafka connectors with Avro format
 - TR11: Use SQL-like operations for joins and aggregations
 - TR12: Implement proper event time handling and watermarking

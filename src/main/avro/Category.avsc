@@ -1,7 +1,7 @@
 {
   "type": "record",
   "name": "Category",
-  "namespace": "com.example",
+  "namespace": "dev.gamov.streams",
   "fields": [
     {"name": "page_id", "type": "string"},
     {"name": "category", "type": "string"}

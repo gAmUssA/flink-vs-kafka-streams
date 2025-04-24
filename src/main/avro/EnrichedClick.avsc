@@ -1,7 +1,7 @@
 {
   "type": "record",
   "name": "EnrichedClick",
-  "namespace": "com.example",
+  "namespace": "dev.gamov.streams",
   "fields": [
     {"name": "user_id", "type": "string"},
     {"name": "timestamp", "type": "long"},

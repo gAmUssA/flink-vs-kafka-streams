@@ -1,5 +1,8 @@
-package com.example;
+package dev.gamov.streams.kafka;
 
+import dev.gamov.streams.Category;
+import dev.gamov.streams.Click;
+import dev.gamov.streams.EnrichedClick;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;

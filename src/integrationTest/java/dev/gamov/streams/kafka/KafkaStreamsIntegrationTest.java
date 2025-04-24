@@ -1,4 +1,4 @@
-package com.example;
+package dev.gamov.streams.kafka;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -13,6 +13,7 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
+import org.awaitility.Awaitility;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.slf4j.Logger;
@@ -27,11 +28,13 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import dev.gamov.streams.Category;
+import dev.gamov.streams.Click;
+import dev.gamov.streams.KafkaTCIntegrationTestBase;
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Integration test for KafkaStreamsProcessor using Testcontainers.
@@ -40,6 +43,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class KafkaStreamsIntegrationTest extends KafkaTCIntegrationTestBase {
 
   private static final Logger logger = LoggerFactory.getLogger(KafkaStreamsIntegrationTest.class);
+
   /**
    * Sample test that demonstrates how to use Testcontainers for integration testing.
    * This test would:
@@ -86,10 +90,10 @@ public class KafkaStreamsIntegrationTest extends KafkaTCIntegrationTestBase {
       // Produce test data to the input topics
       produceTestData();
 
-      // Give the streams application some time to process the data
-      Thread.sleep(5000);
+      // Use Awaitility to wait for data processing instead of Thread.sleep
+      logger.info("Waiting for Kafka Streams to process data");
 
-      // Consume and verify the output
+      // Consume and verify the output with Awaitility
       verifyOutput();
 
       logger.info("End-to-end integration test completed successfully");
@@ -224,46 +228,49 @@ public class KafkaStreamsIntegrationTest extends KafkaTCIntegrationTestBase {
       // Create a map to store the results (category -> count)
       Map<String, Integer> categoryCounts = new HashMap<>();
 
-      // Poll for records with timeout
-      int maxAttempts = 10;
-      int attempt = 0;
-      boolean foundAllCategories = false;
+      logger.info("Using Awaitility to wait for output records");
 
-      logger.info("Polling for output records");
-      while (attempt < maxAttempts && !foundAllCategories) {
-        ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(1));
+      // Use Awaitility to poll for records until all categories are found
+      Awaitility.await()
+          .atMost(30, TimeUnit.SECONDS)
+          .pollInterval(Duration.ofSeconds(1))
+          .pollInSameThread() // Important for Kafka Consumer which is not thread-safe
+          .until(() -> {
+            // Poll for records
+            ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(1));
 
-        for (ConsumerRecord<String, String> record : records) {
-          logger.info("Received record: key={}, value={}", record.key(), record.value());
+            // Process any new records
+            for (ConsumerRecord<String, String> record : records) {
+              logger.info("Received record: key={}, value={}", record.key(), record.value());
 
-          // Extract the count from the value (format: "Count: X for window: ...")
-          String value = record.value();
-          if (value.startsWith("Count: ")) {
-            int countEndIndex = value.indexOf(" for window");
-            if (countEndIndex > 7) { // "Count: ".length() = 7
-              String countStr = value.substring(7, countEndIndex);
-              try {
-                int count = Integer.parseInt(countStr);
-                categoryCounts.put(record.key(), count);
-                logger.info("Parsed count for category {}: {}", record.key(), count);
-              } catch (NumberFormatException e) {
-                logger.warn("Could not parse count from value: {}", value);
+              // Extract the count from the value (format: "Count: X for window: ...")
+              String value = record.value();
+              if (value.startsWith("Count: ")) {
+                int countEndIndex = value.indexOf(" for window");
+                if (countEndIndex > 7) { // "Count: ".length() = 7
+                  String countStr = value.substring(7, countEndIndex);
+                  try {
+                    int count = Integer.parseInt(countStr);
+                    categoryCounts.put(record.key(), count);
+                    logger.info("Parsed count for category {}: {}", record.key(), count);
+                  } catch (NumberFormatException e) {
+                    logger.warn("Could not parse count from value: {}", value);
+                  }
+                }
               }
             }
-          }
-        }
 
-        // Check if we have counts for all categories
-        foundAllCategories = categoryCounts.containsKey("sports") &&
-                             categoryCounts.containsKey("news") &&
-                             categoryCounts.containsKey("entertainment");
+            // Check if we have counts for all categories
+            boolean foundAllCategories = categoryCounts.containsKey("sports") &&
+                                         categoryCounts.containsKey("news") &&
+                                         categoryCounts.containsKey("entertainment");
 
-        if (!foundAllCategories) {
-          logger.info("Not all categories found yet, polling again (attempt {}/{})",
-                      ++attempt, maxAttempts);
-          Thread.sleep(1000); // Wait a bit before polling again
-        }
-      }
+            if (!foundAllCategories) {
+              logger.info("Not all categories found yet, will poll again");
+            }
+
+            return foundAllCategories;
+          });
 
       // Verify the results
       logger.info("Verifying category counts: {}", categoryCounts);
@@ -272,14 +279,32 @@ public class KafkaStreamsIntegrationTest extends KafkaTCIntegrationTestBase {
       // - 2 unique users for sports (user1, user2)
       // - 2 unique users for news (user1, user3)
       // - 1 unique user for entertainment (user4)
-      assertTrue(categoryCounts.containsKey("sports"), "Sports category not found in output");
-      assertEquals(2, categoryCounts.get("sports"), "Expected 2 unique users for sports");
+      assertThat(categoryCounts)
+          .as("Category counts map").containsKey("sports")
+          .withFailMessage("Sports category not found in output");
 
-      assertTrue(categoryCounts.containsKey("news"), "News category not found in output");
-      assertEquals(2, categoryCounts.get("news"), "Expected 2 unique users for news");
+      assertThat(categoryCounts.get("sports"))
+          .as("Sports unique users count")
+          .isEqualTo(2)
+          .withFailMessage("Expected 2 unique users for sports");
 
-      assertTrue(categoryCounts.containsKey("entertainment"), "Entertainment category not found in output");
-      assertEquals(1, categoryCounts.get("entertainment"), "Expected 1 unique user for entertainment");
+      assertThat(categoryCounts).as("Category counts map").containsKey("news")
+          .withFailMessage("News category not found in output");
+
+      assertThat(categoryCounts.get("news"))
+          .as("News unique users count")
+          .isEqualTo(2)
+          .withFailMessage("Expected 2 unique users for news");
+
+      assertThat(categoryCounts)
+          .as("Category counts map")
+          .containsKey("entertainment")
+          .withFailMessage("Entertainment category not found in output");
+
+      assertThat(categoryCounts.get("entertainment"))
+          .as("Entertainment unique users count")
+          .isEqualTo(1)
+          .withFailMessage("Expected 1 unique user for entertainment");
 
       logger.info("Output verification successful");
     } catch (Exception e) {

@@ -1,5 +1,6 @@
-package com.example;
+package dev.gamov.streams;
 
+import dev.gamov.streams.kafka.KafkaStreamsProcessor;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.junit.jupiter.api.AfterAll;
@@ -17,7 +18,7 @@ import java.util.concurrent.ExecutionException;
 
 public class KafkaTCIntegrationTestBase {
 
-  protected static final Logger logger = LoggerFactory.getLogger(KafkaStreamsIntegrationTest.class);
+  protected static final Logger logger = LoggerFactory.getLogger(KafkaTCIntegrationTestBase.class);
   private static final String KAFKA_IMAGE = "confluentinc/cp-kafka:7.9.0";
   private static final String SCHEMA_REGISTRY_IMAGE = "confluentinc/cp-schema-registry:7.9.0";
   protected static KafkaContainer kafkaContainer;

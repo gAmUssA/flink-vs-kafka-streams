@@ -3,9 +3,9 @@
 ## Project Overview
 This document outlines the implementation plan for the real-time analytics demo that calculates unique users per website category using Apache Kafka, Apache Flink, Avro serialization, and Confluent Schema Registry. The demo will showcase three different implementations:
 
-1. Kafka Streams implementation
-2. Flink DataStream API implementation
-3. Flink Table API implementation (using builder-style)
+1. Kafka Streams implementation (in package `dev.gamov.streams.kafka`)
+2. Flink DataStream API implementation (in package `dev.gamov.streams.flink`)
+3. Flink Table API implementation (using builder-style, in package `dev.gamov.streams.flink`)
 
 ## Current Status
 

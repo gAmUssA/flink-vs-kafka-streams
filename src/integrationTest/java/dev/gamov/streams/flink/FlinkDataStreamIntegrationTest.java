@@ -1,4 +1,4 @@
-package com.example;
+package dev.gamov.streams.flink;
 
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.junit.jupiter.api.Test;
@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.TimeUnit;
+
+import dev.gamov.streams.KafkaTCIntegrationTestBase;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
