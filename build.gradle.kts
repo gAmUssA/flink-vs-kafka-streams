@@ -104,7 +104,7 @@ dependencies {
     integrationTestImplementation("org.testcontainers:testcontainers:$testcontainersVersion")
     integrationTestImplementation("org.testcontainers:junit-jupiter:$testcontainersVersion")
     integrationTestImplementation("org.testcontainers:kafka:$testcontainersVersion")
-    integrationTestImplementation("com.github.docker-java:docker-java-api:3.3.6")
+    integrationTestImplementation("com.github.docker-java:docker-java-api:3.5.0")
 }
 
 java {
