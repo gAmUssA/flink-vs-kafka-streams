@@ -1,0 +1,10 @@
+{
+  "type": "record",
+  "name": "Click",
+  "namespace": "com.example",
+  "fields": [
+    {"name": "user_id", "type": "string"},
+    {"name": "timestamp", "type": "long"},
+    {"name": "page_id", "type": "string"}
+  ]
+}

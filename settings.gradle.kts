@@ -1,0 +1,1 @@
+rootProject.name = "flink-vs-kafka-streams"

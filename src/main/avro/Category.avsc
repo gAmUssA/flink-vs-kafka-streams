@@ -1,0 +1,9 @@
+{
+  "type": "record",
+  "name": "Category",
+  "namespace": "com.example",
+  "fields": [
+    {"name": "page_id", "type": "string"},
+    {"name": "category", "type": "string"}
+  ]
+}

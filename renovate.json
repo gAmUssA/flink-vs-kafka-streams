@@ -1,0 +1,36 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base"
+  ],
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchCurrentVersion": "!/^0/",
+      "automerge": true
+    },
+    {
+      "matchPackagePatterns": ["^org.apache.kafka"],
+      "groupName": "Kafka dependencies"
+    },
+    {
+      "matchPackagePatterns": ["^org.apache.flink"],
+      "groupName": "Flink dependencies"
+    },
+    {
+      "matchPackagePatterns": ["^org.apache.avro"],
+      "groupName": "Avro dependencies"
+    },
+    {
+      "matchPackagePatterns": ["^com.fasterxml.jackson"],
+      "groupName": "Jackson dependencies"
+    }
+  ],
+  "schedule": ["every weekend"],
+  "labels": ["dependencies"],
+  "prHourlyLimit": 2,
+  "prConcurrentLimit": 5,
+  "gradle": {
+    "fileMatch": ["(^|/)build\\.gradle\\.kts$"]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "record",
+  "name": "EnrichedClick",
+  "namespace": "com.example",
+  "fields": [
+    {"name": "user_id", "type": "string"},
+    {"name": "timestamp", "type": "long"},
+    {"name": "category", "type": "string"}
+  ]
+}
