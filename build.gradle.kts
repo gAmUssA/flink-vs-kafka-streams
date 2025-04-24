@@ -1,7 +1,10 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     java
     kotlin("jvm") version "2.1.20"
     id("com.github.davidmc24.gradle.plugin.avro") version "1.9.1"
+    id("jvm-test-suite")
 }
 
 group = "com.example"
@@ -94,6 +97,8 @@ dependencies {
     // Integration Testing
     integrationTestImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     integrationTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+    // Explicitly declare the test framework implementation dependencies to avoid deprecation warning
+    integrationTestRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     // TestContainers for integration tests
     integrationTestImplementation("org.testcontainers:testcontainers:$testcontainersVersion")
@@ -122,18 +127,30 @@ fun Test.configureTestLogging() {
     }
 }
 
-// Configure the standard test task
-tasks.test {
-    useJUnitPlatform()
-    configureTestLogging()
+// Configure the default test suite with explicit framework dependencies
+testing {
+    suites {
+        // Configure the default test suite
+        val test by getting(JvmTestSuite::class) {
+            useJUnitJupiter(junitVersion)
 
-    // Exclude integration tests from the standard test task
-    filter {
-        excludeTestsMatching("*IntegrationTest")
+            targets {
+                all {
+                    testTask.configure {
+                        configureTestLogging()
+
+                        // Exclude integration tests from the standard test task
+                        filter {
+                            excludeTestsMatching("*IntegrationTest")
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
-// Configure the integration test task
+// Configure the integration test task manually
 val integrationTest = tasks.register<Test>("integrationTest") {
     description = "Runs integration tests."
     group = "verification"
@@ -157,8 +174,8 @@ tasks.withType<Copy> {
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = "11"
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_11)
     }
 }
 
