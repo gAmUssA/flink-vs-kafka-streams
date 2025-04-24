@@ -61,6 +61,7 @@ java {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+    systemProperty("jansi.passthrough", "true")
 }
 
 tasks.withType<Copy> {
@@ -71,6 +72,10 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
         jvmTarget = "11"
     }
+}
+
+tasks.withType<JavaExec> {
+    systemProperty("jansi.passthrough", "true")
 }
 
 avro {

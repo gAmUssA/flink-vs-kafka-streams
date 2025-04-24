@@ -1,25 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <!-- Enable JAnsi for Windows ANSI color support -->
+    <!-- Use built-in logback color codes -->
     <conversionRule conversionWord="highlight" 
-                  converterClass="ch.qos.logback.classic.pattern.color.HighlightingCompositeConverter" />
+                    converterClass="ch.qos.logback.classic.pattern.color.HighlightingCompositeConverter" />
 
+    <!-- Console Appender for logging to the console with colors -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- Allow ANSI color codes -->
         <withJansi>true</withJansi>
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} %highlight(%-5level) [%thread] %cyan(%logger{36}) - %msg%n</pattern>
+            <pattern>
+                %d{HH:mm:ss.SSS} %highlight(%-5level) [%blue(%thread)] %magenta(%logger{36}) - %msg%n
+            </pattern>
         </encoder>
     </appender>
 
-    <!-- Application logs -->
+    <!-- Custom logger for your application -->
     <logger name="com.example" level="INFO" />
 
-    <!-- Reduce verbosity of third-party libraries -->
+    <!-- Reduce verbosity for specific libraries -->
     <logger name="org.apache.kafka" level="WARN" />
     <logger name="org.apache.flink" level="WARN" />
     <logger name="io.confluent" level="WARN" />
 
-    <!-- Root logger -->
+    <!-- Root Logger -->
     <root level="INFO">
         <appender-ref ref="CONSOLE" />
     </root>
