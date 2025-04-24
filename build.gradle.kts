@@ -14,6 +14,7 @@ repositories {
     }
 }
 
+// Define versions in one place
 val kafkaVersion = "3.4.0"
 val flinkVersion = "1.20.0"
 val confluentVersion = "7.5.0"
@@ -21,6 +22,39 @@ val avroVersion = "1.12.0"
 val junitVersion = "5.9.2"
 val logbackVersion = "1.5.18"
 val slf4jVersion = "2.0.17"
+val testcontainersVersion = "1.19.7"
+
+// Define source sets
+sourceSets {
+    main {
+        java {
+            srcDir("src/main/java")
+            srcDir("build/generated-main-avro-java")
+        }
+        resources {
+            srcDir("src/main/resources")
+        }
+    }
+    create("integrationTest") {
+        java {
+            srcDir("src/integrationTest/java")
+        }
+        resources {
+            srcDir("src/integrationTest/resources")
+        }
+        compileClasspath += sourceSets.main.get().output
+        runtimeClasspath += sourceSets.main.get().output
+    }
+}
+
+// Create a configuration for integration tests
+val integrationTestImplementation by configurations.getting {
+    extendsFrom(configurations.implementation.get())
+}
+
+val integrationTestRuntimeOnly by configurations.getting {
+    extendsFrom(configurations.runtimeOnly.get())
+}
 
 dependencies {
     // Kafka Streams
@@ -33,6 +67,7 @@ dependencies {
     implementation("org.apache.flink:flink-table-api-java:$flinkVersion")
     implementation("org.apache.flink:flink-table-runtime:$flinkVersion")
     implementation("org.apache.flink:flink-connector-kafka:3.4.0-1.20")
+    implementation("org.apache.flink:flink-table-api-java-bridge:$flinkVersion")
 
     // Avro
     implementation("org.apache.avro:avro:$avroVersion")
@@ -52,6 +87,19 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
     testImplementation("org.apache.kafka:kafka-streams-test-utils:$kafkaVersion")
+    testImplementation("org.apache.flink:flink-test-utils:$flinkVersion")
+    testImplementation("org.apache.flink:flink-runtime:$flinkVersion")
+    testImplementation("org.apache.flink:flink-streaming-java:$flinkVersion:tests")
+
+    // Integration Testing
+    integrationTestImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+    integrationTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+
+    // TestContainers for integration tests
+    integrationTestImplementation("org.testcontainers:testcontainers:$testcontainersVersion")
+    integrationTestImplementation("org.testcontainers:junit-jupiter:$testcontainersVersion")
+    integrationTestImplementation("org.testcontainers:kafka:$testcontainersVersion")
+    integrationTestImplementation("com.github.docker-java:docker-java-api:3.3.6")
 }
 
 java {
@@ -59,15 +107,8 @@ java {
     targetCompatibility = JavaVersion.VERSION_11
 }
 
-testing {
-    suites {
-        val test by getting(JvmTestSuite::class) {
-            useJUnitJupiter(junitVersion)
-        }
-    }
-}
-
-tasks.withType<Test> {
+// Configure common test settings
+fun Test.configureTestLogging() {
     systemProperty("jansi.passthrough", "true")
 
     // Display test class and test name during test execution
@@ -77,11 +118,38 @@ tasks.withType<Test> {
         showExceptions = true
         showCauses = true
         showStackTraces = true
-
-        // Print test class and test name
         displayGranularity = 2
     }
-    
+}
+
+// Configure the standard test task
+tasks.test {
+    useJUnitPlatform()
+    configureTestLogging()
+
+    // Exclude integration tests from the standard test task
+    filter {
+        excludeTestsMatching("*IntegrationTest")
+    }
+}
+
+// Configure the integration test task
+val integrationTest = tasks.register<Test>("integrationTest") {
+    description = "Runs integration tests."
+    group = "verification"
+
+    useJUnitPlatform()
+    configureTestLogging()
+
+    testClassesDirs = sourceSets["integrationTest"].output.classesDirs
+    classpath = sourceSets["integrationTest"].runtimeClasspath
+
+    shouldRunAfter(tasks.test)
+}
+
+// Add integration tests to the check task
+tasks.check {
+    dependsOn(integrationTest)
 }
 
 tasks.withType<Copy> {
@@ -103,18 +171,7 @@ avro {
     fieldVisibility.set("PRIVATE")
 }
 
-sourceSets {
-    main {
-        java {
-            srcDir("src/main/java")
-            srcDir("build/generated-main-avro-java")
-        }
-        resources {
-            srcDir("src/main/resources")
-        }
-    }
-}
-
+// Avro schema generation
 tasks.register<Copy>("copyAvroSchemas") {
     from("src/main/avro")
     into("build/avro")
