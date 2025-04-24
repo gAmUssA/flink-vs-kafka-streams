@@ -59,9 +59,29 @@ java {
     targetCompatibility = JavaVersion.VERSION_11
 }
 
+testing {
+    suites {
+        val test by getting(JvmTestSuite::class) {
+            useJUnitJupiter(junitVersion)
+        }
+    }
+}
+
 tasks.withType<Test> {
-    useJUnitPlatform()
     systemProperty("jansi.passthrough", "true")
+
+    // Display test class and test name during test execution
+    testLogging {
+        events("started", "passed", "skipped", "failed", "standard_out", "standard_error")
+        showStandardStreams = true
+        showExceptions = true
+        showCauses = true
+        showStackTraces = true
+
+        // Print test class and test name
+        displayGranularity = 2
+    }
+    
 }
 
 tasks.withType<Copy> {

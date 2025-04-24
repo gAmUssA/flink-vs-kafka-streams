@@ -14,6 +14,8 @@ import org.apache.kafka.streams.test.TestRecord;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -28,6 +30,8 @@ import static org.junit.jupiter.api.Assertions.*;
  * Test class for KafkaStreamsProcessor using TopologyTestDriver
  */
 public class KafkaStreamsProcessorTest {
+
+    private static final Logger logger = LoggerFactory.getLogger(KafkaStreamsProcessorTest.class);
 
     private TopologyTestDriver testDriver;
     private TestInputTopic<String, Click> clicksTopic;
@@ -118,7 +122,7 @@ public class KafkaStreamsProcessorTest {
         assertEquals(1000L, result.getTimestamp(), "Timestamp should match");
         assertEquals("testCategory", result.getCategory(), "Category should match");
 
-        System.out.println("[DEBUG_LOG] Test passed: joinClickWithCategory correctly joined Click and Category");
+        logger.debug("Test passed: joinClickWithCategory correctly joined Click and Category");
     }
 
     @Test
@@ -142,8 +146,8 @@ public class KafkaStreamsProcessorTest {
         assertEquals("sports", outputRecord.key(), "Output key should be the category");
         assertTrue(outputRecord.value().contains("Count: 1"), "Output value should contain count of 1");
 
-        System.out.println("[DEBUG_LOG] Test passed: Topology correctly processed click and category data");
-        System.out.println("[DEBUG_LOG] Output record: " + outputRecord.key() + " -> " + outputRecord.value());
+        logger.debug("Test passed: Topology correctly processed click and category data");
+        logger.debug("Output record: {} -> {}", outputRecord.key(), outputRecord.value());
     }
 
     @Test
@@ -192,7 +196,7 @@ public class KafkaStreamsProcessorTest {
             String category = record.key();
             String value = record.value();
 
-            System.out.println("[DEBUG_LOG] Output record: " + category + " -> " + value);
+            logger.debug("Output record: {} -> {}", category, value);
 
             // Extract count from value string
             int count = Integer.parseInt(value.split("Count: ")[1].split(" ")[0]);
@@ -209,7 +213,7 @@ public class KafkaStreamsProcessorTest {
         // news should have 1 unique user (user1)
         assertEquals(1, categoryCounts.get("news"), "News category should have 1 unique user");
 
-        System.out.println("[DEBUG_LOG] Category counts: " + categoryCounts);
+        logger.debug("Category counts: {}", categoryCounts);
     }
 
     @Test
@@ -231,10 +235,10 @@ public class KafkaStreamsProcessorTest {
         clicksTopic.pipeInput("key1", click1);
 
         // Read all records from the output topic
-        System.out.println("[DEBUG_LOG] After first click (user1):");
+        logger.debug("After first click (user1):");
         while (!outputTopic.isEmpty()) {
             TestRecord<String, String> record = outputTopic.readRecord();
-            System.out.println("[DEBUG_LOG] Record: " + record.key() + " -> " + record.value());
+            logger.debug("Record: {} -> {}", record.key(), record.value());
         }
 
         // Add another click from the same user
@@ -245,10 +249,10 @@ public class KafkaStreamsProcessorTest {
         clicksTopic.pipeInput("key2", click2);
 
         // Read all records from the output topic
-        System.out.println("[DEBUG_LOG] After second click (user1 again):");
+        logger.debug("After second click (user1 again):");
         while (!outputTopic.isEmpty()) {
             TestRecord<String, String> record = outputTopic.readRecord();
-            System.out.println("[DEBUG_LOG] Record: " + record.key() + " -> " + record.value());
+            logger.debug("Record: {} -> {}", record.key(), record.value());
         }
 
         // Add a click from a different user
@@ -259,10 +263,10 @@ public class KafkaStreamsProcessorTest {
         clicksTopic.pipeInput("key3", click3);
 
         // Read all records from the output topic
-        System.out.println("[DEBUG_LOG] After third click (user2):");
+        logger.debug("After third click (user2):");
         while (!outputTopic.isEmpty()) {
             TestRecord<String, String> record = outputTopic.readRecord();
-            System.out.println("[DEBUG_LOG] Record: " + record.key() + " -> " + record.value());
+            logger.debug("Record: {} -> {}", record.key(), record.value());
         }
 
         // Add another click from the first user
@@ -273,10 +277,10 @@ public class KafkaStreamsProcessorTest {
         clicksTopic.pipeInput("key4", click4);
 
         // Read all records from the output topic
-        System.out.println("[DEBUG_LOG] After fourth click (user1 again):");
+        logger.debug("After fourth click (user1 again):");
         while (!outputTopic.isEmpty()) {
             TestRecord<String, String> record = outputTopic.readRecord();
-            System.out.println("[DEBUG_LOG] Record: " + record.key() + " -> " + record.value());
+            logger.debug("Record: {} -> {}", record.key(), record.value());
         }
 
         // This test is now exploratory, so we don't assert anything

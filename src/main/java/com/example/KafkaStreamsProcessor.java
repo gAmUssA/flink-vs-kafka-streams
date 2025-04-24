@@ -52,38 +52,31 @@ public class KafkaStreamsProcessor {
 
     @Override
     public Serializer<HashSet<String>> serializer() {
-      return new Serializer<HashSet<String>>() {
-        @Override
-        public byte[] serialize(String topic, HashSet<String> data) {
-          if (data == null) {
-            return null;
-          }
-          try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
-               ObjectOutputStream oos = new ObjectOutputStream(bos)) {
-            oos.writeObject(data);
-            return bos.toByteArray();
-          } catch (IOException e) {
-            throw new RuntimeException("Error serializing HashSet", e);
-          }
+      return (topic, data) -> {
+        if (data == null) {
+          return null;
+        }
+        try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
+             ObjectOutputStream oos = new ObjectOutputStream(bos)) {
+          oos.writeObject(data);
+          return bos.toByteArray();
+        } catch (IOException e) {
+          throw new RuntimeException("Error serializing HashSet", e);
         }
       };
     }
 
     @Override
     public Deserializer<HashSet<String>> deserializer() {
-      return new Deserializer<HashSet<String>>() {
-        @SuppressWarnings("unchecked")
-        @Override
-        public HashSet<String> deserialize(String topic, byte[] data) {
-          if (data == null) {
-            return new HashSet<>();
-          }
-          try (ByteArrayInputStream bis = new ByteArrayInputStream(data);
-               ObjectInputStream ois = new ObjectInputStream(bis)) {
-            return (HashSet<String>) ois.readObject();
-          } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException("Error deserializing HashSet", e);
-          }
+      return (topic, data) -> {
+        if (data == null) {
+          return new HashSet<>();
+        }
+        try (ByteArrayInputStream bis = new ByteArrayInputStream(data);
+             ObjectInputStream ois = new ObjectInputStream(bis)) {
+          return (HashSet<String>) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+          throw new RuntimeException("Error deserializing HashSet", e);
         }
       };
     }
@@ -193,7 +186,7 @@ public class KafkaStreamsProcessor {
         .selectKey((key, click) -> click.getPageId())
         .join(
             categoriesTable,
-            (click, category) -> joinClickWithCategory(click, category),
+            KafkaStreamsProcessor::joinClickWithCategory,
             Joined.with(Serdes.String(), clickSerde, categorySerde)
         );
 
