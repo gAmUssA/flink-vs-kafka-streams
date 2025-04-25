@@ -31,6 +31,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import dev.gamov.streams.Category;
 import dev.gamov.streams.Click;
 import dev.gamov.streams.KafkaTCIntegrationTestBase;
+import dev.gamov.streams.util.TestDataProducer;
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 
@@ -114,93 +115,14 @@ public class KafkaStreamsIntegrationTest extends KafkaTCIntegrationTestBase {
     String schemaRegistryUrl = "http://" + schemaRegistryContainer.getHost() + ":" +
                                schemaRegistryContainer.getMappedPort(8081);
 
-    // Create producer properties
-    Properties producerProps = new Properties();
-    producerProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaContainer.getBootstrapServers());
-    producerProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-    producerProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class.getName());
-    producerProps.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, schemaRegistryUrl);
+    // Use the TestDataProducer utility class to produce test data
+    TestDataProducer testDataProducer = new TestDataProducer(
+        kafkaContainer.getBootstrapServers(), 
+        schemaRegistryUrl
+    );
 
-    // Create Kafka producer for Click data
-    try (KafkaProducer<String, Click> clickProducer = new KafkaProducer<>(producerProps);
-         // Create Kafka producer for Category data
-         KafkaProducer<String, Category> categoryProducer = new KafkaProducer<>(producerProps)) {
-
-      // Create and produce Category data
-      logger.info("Producing Category data");
-      Category category1 = new Category();
-      category1.setPageId("page1");
-      category1.setCategory("sports");
-
-      Category category2 = new Category();
-      category2.setPageId("page2");
-      category2.setCategory("news");
-
-      Category category3 = new Category();
-      category3.setPageId("page3");
-      category3.setCategory("entertainment");
-
-      // Send Category records
-      categoryProducer.send(new ProducerRecord<>(KafkaStreamsProcessor.CATEGORIES_TOPIC,
-                                                 category1.getPageId().toString(), category1)).get();
-      categoryProducer.send(new ProducerRecord<>(KafkaStreamsProcessor.CATEGORIES_TOPIC,
-                                                 category2.getPageId().toString(), category2)).get();
-      categoryProducer.send(new ProducerRecord<>(KafkaStreamsProcessor.CATEGORIES_TOPIC,
-                                                 category3.getPageId().toString(), category3)).get();
-
-      logger.info("Category data produced successfully");
-
-      // Create and produce Click data
-      logger.info("Producing Click data");
-
-      // Create clicks for different users on different pages
-      // User1 clicks on page1 (sports)
-      Click click1 = new Click();
-      click1.setUserId("user1");
-      click1.setTimestamp(System.currentTimeMillis());
-      click1.setPageId("page1");
-
-      // User2 clicks on page1 (sports)
-      Click click2 = new Click();
-      click2.setUserId("user2");
-      click2.setTimestamp(System.currentTimeMillis());
-      click2.setPageId("page1");
-
-      // User1 clicks on page2 (news)
-      Click click3 = new Click();
-      click3.setUserId("user1");
-      click3.setTimestamp(System.currentTimeMillis());
-      click3.setPageId("page2");
-
-      // User3 clicks on page2 (news)
-      Click click4 = new Click();
-      click4.setUserId("user3");
-      click4.setTimestamp(System.currentTimeMillis());
-      click4.setPageId("page2");
-
-      // User4 clicks on page3 (entertainment)
-      Click click5 = new Click();
-      click5.setUserId("user4");
-      click5.setTimestamp(System.currentTimeMillis());
-      click5.setPageId("page3");
-
-      // Send Click records
-      clickProducer.send(new ProducerRecord<>(KafkaStreamsProcessor.CLICKS_TOPIC,
-                                              click1.getUserId().toString(), click1)).get();
-      clickProducer.send(new ProducerRecord<>(KafkaStreamsProcessor.CLICKS_TOPIC,
-                                              click2.getUserId().toString(), click2)).get();
-      clickProducer.send(new ProducerRecord<>(KafkaStreamsProcessor.CLICKS_TOPIC,
-                                              click3.getUserId().toString(), click3)).get();
-      clickProducer.send(new ProducerRecord<>(KafkaStreamsProcessor.CLICKS_TOPIC,
-                                              click4.getUserId().toString(), click4)).get();
-      clickProducer.send(new ProducerRecord<>(KafkaStreamsProcessor.CLICKS_TOPIC,
-                                              click5.getUserId().toString(), click5)).get();
-
-      logger.info("Click data produced successfully");
-    } catch (Exception e) {
-      logger.error("Error producing test data", e);
-      throw new RuntimeException("Could not produce test data", e);
-    }
+    // Produce standard test data (categories and clicks)
+    testDataProducer.produceStandardTestData();
 
     logger.info("Test data produced successfully");
   }
