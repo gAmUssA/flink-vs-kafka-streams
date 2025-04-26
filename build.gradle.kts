@@ -107,7 +107,7 @@ dependencies {
     integrationTestImplementation("com.github.docker-java:docker-java-api:3.5.0")
 
     // Awaitility for better async testing
-    integrationTestImplementation("org.awaitility:awaitility:4.2.0")
+    integrationTestImplementation("org.awaitility:awaitility:4.3.0")
 
     // AssertJ for fluent assertions
     integrationTestImplementation("org.assertj:assertj-core:3.27.3")
