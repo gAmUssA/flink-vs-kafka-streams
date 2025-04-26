@@ -110,7 +110,7 @@ dependencies {
     integrationTestImplementation("org.awaitility:awaitility:4.2.0")
 
     // AssertJ for fluent assertions
-    integrationTestImplementation("org.assertj:assertj-core:3.25.3")
+    integrationTestImplementation("org.assertj:assertj-core:3.27.3")
 }
 
 java {
