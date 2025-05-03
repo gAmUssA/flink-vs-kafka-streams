@@ -84,7 +84,7 @@ dependencies {
     implementation("org.slf4j:slf4j-api:$slf4jVersion")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
     implementation("ch.qos.logback:logback-core:$logbackVersion")
-    implementation("org.fusesource.jansi:jansi:2.4.1")  // For colorful console output
+    implementation("org.fusesource.jansi:jansi:2.4.2")  // For colorful console output
 
     // Testing
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
