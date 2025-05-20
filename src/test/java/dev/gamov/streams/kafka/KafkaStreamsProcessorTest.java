@@ -1,9 +1,5 @@
 package dev.gamov.streams.kafka;
 
-import dev.gamov.streams.Category;
-import dev.gamov.streams.Click;
-import dev.gamov.streams.EnrichedClick;
-import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -20,14 +16,20 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 
-import static org.junit.jupiter.api.Assertions.*;
+import dev.gamov.streams.Category;
+import dev.gamov.streams.Click;
+import dev.gamov.streams.EnrichedClick;
+import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test class for KafkaStreamsProcessor using TopologyTestDriver

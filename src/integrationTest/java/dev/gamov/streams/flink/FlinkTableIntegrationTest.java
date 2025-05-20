@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.TimeUnit;
 
 import dev.gamov.streams.KafkaTCIntegrationTestBase;
+import dev.gamov.streams.util.TestDataProducer;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -90,11 +91,18 @@ public class FlinkTableIntegrationTest extends KafkaTCIntegrationTestBase {
   private void produceTestData() {
     logger.info("Producing test data to input topics");
 
-    // TODO: Implement test data production
-    // This would include:
-    // 1. Creating Avro serializers configured with the test Schema Registry
-    // 2. Creating test Click and Category objects
-    // 3. Producing these objects to the input topics
+    // Construct the schema registry URL
+    String schemaRegistryUrl = "http://" + schemaRegistryContainer.getHost() + ":" +
+                               schemaRegistryContainer.getMappedPort(8081);
+
+    // Use the TestDataProducer utility class to produce test data
+    TestDataProducer testDataProducer = new TestDataProducer(
+        kafkaContainer.getBootstrapServers(), 
+        schemaRegistryUrl
+    );
+
+    // Produce standard test data (categories and clicks)
+    testDataProducer.produceStandardTestData();
 
     logger.info("Test data produced successfully");
   }

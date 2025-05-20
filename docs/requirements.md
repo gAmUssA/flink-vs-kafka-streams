@@ -3,10 +3,12 @@
 ## 1. Introduction
 
 ### 1.1 Purpose
-This document outlines the requirements for a real-time analytics system that calculates unique users per website category. The system will demonstrate the capabilities of modern stream processing frameworks and serve as a reference implementation for Java developers and streaming engineers.
+This document outlines the requirements for a real-time analytics system that calculates unique users per website category. 
+The system will demonstrate the capabilities of modern stream processing frameworks and serve as a reference implementation for Java developers and streaming engineers.
 
 ### 1.2 Scope
-The system will process user click events, join them with category information, and compute unique user counts per category over time windows. It will showcase three different implementation approaches using Kafka Streams and Apache Flink.
+The system will process user click events, join them with category information, and compute unique user counts per category over time windows. 
+It will showcase three different implementation approaches using Kafka Streams and Apache Flink.
 
 ### 1.3 Definitions
 - **Click Event**: A user interaction with a webpage, containing user ID, timestamp, and page ID
@@ -16,7 +18,8 @@ The system will process user click events, join them with category information, 
 ## 2. Product Overview
 
 ### 2.1 Product Perspective
-This system will be a standalone demo application that integrates with Apache Kafka for data ingestion and output. It will demonstrate real-world analytics capabilities using production-grade technologies.
+This system will be a standalone demo application that integrates with Apache Kafka for data ingestion and output.
+It will demonstrate real-world analytics capabilities using production-grade technologies.
 
 ### 2.2 Product Features
 - Real-time processing of click events
@@ -38,7 +41,7 @@ This system will be a standalone demo application that integrates with Apache Ka
 - FR4: Count unique users per category over a sliding one-hour window
 - FR5: Update the counts every minute
 - FR6: Output results to a Kafka topic named "output-topic"
-- FR7: Provide access to intermediate state of processing
+- FR7: Provide access to the intermediate state of processing
 
 ### 3.2 Data Model Requirements
 - DR1: Click events must contain user_id (string), timestamp (long), and page_id (string)
