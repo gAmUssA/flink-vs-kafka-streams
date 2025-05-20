@@ -69,7 +69,7 @@ dependencies {
     implementation("org.apache.flink:flink-avro-confluent-registry:$flinkVersion")
     implementation("org.apache.flink:flink-table-api-java:$flinkVersion")
     implementation("org.apache.flink:flink-table-runtime:$flinkVersion")
-    implementation("org.apache.flink:flink-connector-kafka:3.4.0-1.20")
+    implementation("org.apache.flink:flink-connector-kafka:4.0.0-2.0")
     implementation("org.apache.flink:flink-connector-base:$flinkVersion")
     implementation("org.apache.flink:flink-table-api-java-bridge:$flinkVersion")
     implementation("org.apache.flink:flink-clients:$flinkVersion")
