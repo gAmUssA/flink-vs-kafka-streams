@@ -7,6 +7,9 @@ import org.apache.flink.api.common.state.MapStateDescriptor;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.configuration.Configuration;
+import org.apache.flink.connector.base.DeliveryGuarantee;
+import org.apache.flink.connector.kafka.sink.KafkaRecordSerializationSchema;
+import org.apache.flink.connector.kafka.sink.KafkaSink;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
 import org.apache.flink.formats.avro.registry.confluent.ConfluentRegistryAvroDeserializationSchema;
@@ -14,8 +17,6 @@ import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.co.KeyedCoProcessFunction;
 import org.apache.flink.util.Collector;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -227,42 +228,35 @@ public class FlinkDataStreamProcessor {
 
         logger.debug("Unique users aggregated per category");
 
-        // 4. Output results to Kafka
+        // 4. Output results to Kafka using KafkaSink
         String bootstrapServers = properties.getProperty("bootstrap.servers");
+        
+        // Create KafkaSink for sending results to Kafka
+        KafkaSink<Tuple2<String, String>> kafkaSink = KafkaSink.<Tuple2<String, String>>builder()
+            .setBootstrapServers(bootstrapServers)
+            .setRecordSerializer(KafkaRecordSerializationSchema.<Tuple2<String, String>>builder()
+                .setTopic(OUTPUT_TOPIC)
+                .setKeySerializationSchema((Tuple2<String, String> element) -> element.f0.getBytes())
+                .setValueSerializationSchema((Tuple2<String, String> element) -> element.f1.getBytes())
+                .build()
+            )
+            .setDeliveryGuarantee(DeliveryGuarantee.AT_LEAST_ONCE)
+            .build();
 
-        // For each result, create a Kafka producer and send the record
-        // This is a simpler approach than using KafkaSink for the integration test
+        // Send results to Kafka using KafkaSink
+        results.sinkTo(kafkaSink);
+        
+        // Also print the results for debugging (same as before)
         results.map(new MapFunction<Tuple2<String, String>, String>() {
             @Override
             public String map(Tuple2<String, String> tuple) throws Exception {
                 String category = tuple.f0;
                 String count = tuple.f1;
-
-                // Log the key and value for debugging
+                
                 logger.debug("Processing result - Category: {}, Count: {}", category, count);
-
-                // Create a Kafka producer and send the record
-                try (KafkaProducer<String, String> producer = new KafkaProducer<>(
-                    java.util.Map.of(
-                        "bootstrap.servers", bootstrapServers,
-                        "key.serializer", "org.apache.kafka.common.serialization.StringSerializer",
-                        "value.serializer", "org.apache.kafka.common.serialization.StringSerializer"
-                    )
-                )) {
-                    // Send the record and wait for acknowledgment
-                    producer.send(new ProducerRecord<>(
-                        OUTPUT_TOPIC, category, count
-                    )).get(); // Using get() to ensure the record is sent before closing the producer
-
-                    logger.debug("Sent to Kafka - Key: {}, Value: {}", category, count);
-                } catch (Exception e) {
-                    logger.error("Error sending to Kafka", e);
-                    throw e; // Re-throw to fail the job if there's an error
-                }
-
                 return "Category: " + category + ", Count: " + count;
             }
-        }).print(); // Print the results for debugging
+        }).print();
 
         logger.info("Results sent to Kafka topic: {}", OUTPUT_TOPIC);
     }
