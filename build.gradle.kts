@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     java
-    kotlin("jvm") version "2.1.20"
+    kotlin("jvm") version "2.1.21"
     id("com.github.davidmc24.gradle.plugin.avro") version "1.9.1"
     id("jvm-test-suite")
 }
@@ -20,7 +20,7 @@ repositories {
 // Define versions in one place
 val kafkaVersion = "3.9.0"
 val flinkVersion = "1.20.1"
-val confluentVersion = "7.9.0"
+val confluentVersion = "7.9.1"
 val avroVersion = "1.12.0"
 val junitVersion = "5.12.2"
 val logbackVersion = "1.5.18"
@@ -78,15 +78,15 @@ dependencies {
     implementation("org.apache.avro:avro:$avroVersion")
 
     // Jackson for Avro
-    implementation("com.fasterxml.jackson.core:jackson-core:2.18.3")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.18.3")
-    implementation("com.fasterxml.jackson.core:jackson-annotations:2.18.3")
+    implementation("com.fasterxml.jackson.core:jackson-core:2.19.0")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.19.0")
+    implementation("com.fasterxml.jackson.core:jackson-annotations:2.19.0")
 
     // Logging
     implementation("org.slf4j:slf4j-api:$slf4jVersion")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
     implementation("ch.qos.logback:logback-core:$logbackVersion")
-    implementation("org.fusesource.jansi:jansi:2.4.1")  // For colorful console output
+    implementation("org.fusesource.jansi:jansi:2.4.2")  // For colorful console output
 
     // Testing
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
@@ -106,13 +106,13 @@ dependencies {
     integrationTestImplementation("org.testcontainers:testcontainers:$testcontainersVersion")
     integrationTestImplementation("org.testcontainers:junit-jupiter:$testcontainersVersion")
     integrationTestImplementation("org.testcontainers:kafka:$testcontainersVersion")
-    integrationTestImplementation("com.github.docker-java:docker-java-api:3.5.0")
+    integrationTestImplementation("com.github.docker-java:docker-java-api:3.5.1")
 
     // Awaitility for better async testing
-    integrationTestImplementation("org.awaitility:awaitility:4.2.0")
+    integrationTestImplementation("org.awaitility:awaitility:4.3.0")
 
     // AssertJ for fluent assertions
-    integrationTestImplementation("org.assertj:assertj-core:3.25.3")
+    integrationTestImplementation("org.assertj:assertj-core:3.27.3")
 }
 
 java {
