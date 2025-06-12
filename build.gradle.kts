@@ -18,14 +18,14 @@ repositories {
 }
 
 // Define versions in one place
-val kafkaVersion = "3.9.0"
+val kafkaVersion = "3.9.1"
 val flinkVersion = "1.20.1"
 val confluentVersion = "7.9.1"
 val avroVersion = "1.12.0"
-val junitVersion = "5.12.2"
+val junitVersion = "5.13.1"
 val logbackVersion = "1.5.18"
 val slf4jVersion = "2.0.17"
-val testcontainersVersion = "1.21.0"
+val testcontainersVersion = "1.21.1"
 
 // Define source sets
 sourceSets {
