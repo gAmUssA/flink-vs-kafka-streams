@@ -5,6 +5,7 @@ plugins {
     kotlin("jvm") version "2.1.21"
     id("com.github.davidmc24.gradle.plugin.avro") version "1.9.1"
     id("jvm-test-suite")
+    application
 }
 
 group = "dev.gamov.streams"
@@ -26,6 +27,7 @@ val junitVersion = "5.13.1"
 val logbackVersion = "1.5.18"
 val slf4jVersion = "2.0.17"
 val testcontainersVersion = "1.21.1"
+val picocliVersion = "4.7.5"
 
 // Define source sets
 sourceSets {
@@ -63,6 +65,9 @@ dependencies {
     // Kafka Streams
     implementation("org.apache.kafka:kafka-streams:$kafkaVersion")
     implementation("io.confluent:kafka-streams-avro-serde:$confluentVersion")
+
+    // Picocli for command-line interface
+    implementation("info.picocli:picocli:$picocliVersion")
 
     // Flink
     implementation("org.apache.flink:flink-streaming-java:$flinkVersion")
@@ -211,4 +216,9 @@ tasks.named("generateAvroJava") {
 
 tasks.named("compileJava") {
     dependsOn("generateAvroJava")
+}
+
+// Configure the application plugin
+application {
+    mainClass.set("dev.gamov.streams.generator.DataGeneratorApp")
 }
