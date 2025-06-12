@@ -72,6 +72,7 @@ dependencies {
     implementation("org.apache.flink:flink-connector-kafka:3.4.0-1.20")
     implementation("org.apache.flink:flink-connector-base:$flinkVersion")
     implementation("org.apache.flink:flink-table-api-java-bridge:$flinkVersion")
+    implementation("org.apache.flink:flink-table-planner-loader:$flinkVersion")
     implementation("org.apache.flink:flink-clients:$flinkVersion")
 
     // Avro

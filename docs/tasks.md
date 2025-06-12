@@ -62,36 +62,36 @@ This document contains a detailed enumerated task list for implementing the real
 ## 3. Flink Table API Implementation (Builder Style)
 
 ### 3.1. Environment Setup
-- [ ] 3.1.1. Set up StreamExecutionEnvironment
-- [ ] 3.1.2. Set up TableEnvironment
+- [x] 3.1.1. Set up StreamExecutionEnvironment
+- [x] 3.1.2. Set up TableEnvironment
 
 ### 3.2. Table Definitions
-- [ ] 3.2.1. Define clicks table using TableSource with KafkaTableSourceSinkFactory
-- [ ] 3.2.2. Define categories table using TableSource with KafkaTableSourceSinkFactory
-- [ ] 3.2.3. Specify Avro-Confluent format and Schema Registry for both tables
+- [x] 3.2.1. Define clicks table using TableSource with KafkaTableSourceSinkFactory
+- [x] 3.2.2. Define categories table using TableSource with KafkaTableSourceSinkFactory
+- [x] 3.2.3. Specify Avro-Confluent format and Schema Registry for both tables
 
 ### 3.3. Table Operations
-- [ ] 3.3.1. Join clicks and categories using Table API
-- [ ] 3.3.2. Group by category with a sliding window (1 hour, updated every minute)
-- [ ] 3.3.3. Count distinct users using builder-style API
-- [ ] 3.3.4. Output results to Kafka
+- [x] 3.3.1. Join clicks and categories using Table API
+- [x] 3.3.2. Group by category with a sliding window (1 hour, updated every minute)
+- [x] 3.3.3. Count distinct users using builder-style API
+- [x] 3.3.4. Output results to Kafka
 
 ### 3.4. Event Time and Error Handling
-- [ ] 3.4.1. Implement proper event time handling
-- [ ] 3.4.2. Configure watermarking for late events
-- [ ] 3.4.3. Add error handling and logging
+- [x] 3.4.1. Implement proper event time handling
+- [x] 3.4.2. Configure watermarking for late events
+- [x] 3.4.3. Add error handling and logging
 
 ### 3.5. Testing
-- [ ] 3.5.1. Create unit tests for Table API operations
-- [ ] 3.5.2. Implement integration tests
-- [ ] 3.5.3. Verify window and aggregation functionality
+- [x] 3.5.1. Create unit tests for Table API operations
+- [x] 3.5.2. Implement integration tests
+- [x] 3.5.3. Verify window and aggregation functionality
 
 ### 3.6. Integration Testing with Testcontainers
-- [ ] 3.6.1. Reuse Testcontainers setup from previous implementations
-- [ ] 3.6.2. Create integration tests for Flink Table API with real Kafka
-- [ ] 3.6.3. Test SQL queries and table operations with actual data
-- [ ] 3.6.4. Verify Avro format configuration with Schema Registry
-- [ ] 3.6.5. Test end-to-end pipeline with builder-style API
+- [x] 3.6.1. Reuse Testcontainers setup from previous implementations
+- [x] 3.6.2. Create integration tests for Flink Table API with real Kafka
+- [x] 3.6.3. Test SQL queries and table operations with actual data
+- [x] 3.6.4. Verify Avro format configuration with Schema Registry
+- [x] 3.6.5. Test end-to-end pipeline with builder-style API
 
 ## 4. State Access Implementation
 

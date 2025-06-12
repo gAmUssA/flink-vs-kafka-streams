@@ -25,6 +25,7 @@
     <logger name="org.apache.kafka" level="WARN" />
     <logger name="org.apache.flink" level="WARN" />
     <logger name="io.confluent" level="WARN" />
+    <logger name="dev.gamov.streams.flink" level="DEBUG" />
 
     <!-- Root Logger -->
     <root level="INFO">
