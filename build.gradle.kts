@@ -27,7 +27,7 @@ val junitVersion = "5.13.1"
 val logbackVersion = "1.5.18"
 val slf4jVersion = "2.0.17"
 val testcontainersVersion = "1.21.1"
-val picocliVersion = "4.7.5"
+val picocliVersion = "4.7.7"
 
 // Define source sets
 sourceSets {
