@@ -112,7 +112,7 @@ dependencies {
     integrationTestImplementation("org.testcontainers:testcontainers:$testcontainersVersion")
     integrationTestImplementation("org.testcontainers:junit-jupiter:$testcontainersVersion")
     integrationTestImplementation("org.testcontainers:kafka:$testcontainersVersion")
-    integrationTestImplementation("com.github.docker-java:docker-java-api:3.5.2")
+    integrationTestImplementation("com.github.docker-java:docker-java-api:3.5.3")
 
     // Awaitility for better async testing
     integrationTestImplementation("org.awaitility:awaitility:4.3.0")
