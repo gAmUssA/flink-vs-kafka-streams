@@ -20,7 +20,7 @@ repositories {
 
 // Define versions in one place
 val kafkaVersion = "3.9.1"
-val flinkVersion = "1.20.1"
+val flinkVersion = "1.20.2"
 val confluentVersion = "7.9.2"
 val avroVersion = "1.12.0"
 val junitVersion = "5.13.3"
