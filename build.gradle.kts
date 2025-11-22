@@ -22,7 +22,7 @@ repositories {
 val kafkaVersion = "3.9.1"
 val flinkVersion = "1.20.2"
 val confluentVersion = "7.9.4"
-val avroVersion = "1.12.0"
+val avroVersion = "1.12.1"
 val junitVersion = "5.13.4"
 val logbackVersion = "1.5.18"
 val slf4jVersion = "2.0.17"
